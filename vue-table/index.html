@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue table</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+</head>
+
+<body>
+
+  <!-- template for the modal component -->
+  <script type="text/x-template" id="modal-template">
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+            </slot>
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+            </slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              <a href="https://github.com/vortepk/">https://github.com/vortepk/</a>
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</script>
+
+  <!-- component template -->
+  <script type="text/x-template" id="grid-template">
+    <table>
+      <thead>
+        <tr>
+          <th v-for="key in columns"
+            @click="sortBy(key)"
+            :class="{ active: sortKey == key }">
+            {{ key | capitalize }}
+            <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="entry in filteredData">
+          <td v-for="key in columns">
+            {{entry[key]}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </script>
+
+  <!-- demo root element -->
+  <div id="demo" class="container">
+    <section>
+      Search <input name="query" v-model="searchQuery"><br/><br/>
+      Name <input type="text" v-model="person.name" pattern="^[A-Za-zА-Яа-яЁё]+$"><br/><br/>
+      Surname <input type="text" v-model="person.surname" pattern="^[A-Za-zА-Яа-яЁё]+$"><br/><br/>
+      <input type="submit" v-on:click="checkInputs" value="Добавить">
+      <button id="show-modal" @click="showModal = true">Подробнее</button>
+      <modal v-if="showModal" @close="showModal = false">
+        <h3 slot="header">Подробнее</h3>
+        <p slot="body">TODO look-a-like проект на Vue. Реализовано добавление новых людей в таблицу, возраст назначается случайно. Возможность сортировки и поиска по таблице. </p>
+      </modal>
+      <p v-if="errors.length">
+        <b>Пожалуйста исправьте указанные ошибки:</b>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+      </p>
+      <demo-grid :data="gridData" :columns="gridColumns" :filter-key="searchQuery">
+      </demo-grid>
+    </section>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

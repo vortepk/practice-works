@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Pokemon finder</title>
+</head>
+
+<body>
+    <style>
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <div id="app" v-model="getPokemon">
+        <input v-model="name" placeholder="Pokedude name">&nbsp;<span v-bind:title="intro">&#63;</span>
+        <img v-bind:src="img">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

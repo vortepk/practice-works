@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ЛОТО 4 из 20</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<!-- template for the modal component -->
+<script type="text/x-template" id="modal-template">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+  
+            <div class="modal-header">
+              <slot name="header">
+              </slot>
+            </div>
+  
+            <div class="modal-body">
+              <slot name="body">
+              </slot>
+            </div>
+  
+            <div class="modal-footer">
+              <slot name="footer">
+                <a href="https://github.com/vortepk/">https://github.com/vortepk/</a>
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </slot>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </script>
+
+<body>
+    <div class="parent">
+    <div id="app">
+            <h3>Генератор лотерейных билетов</h3>
+            <button id="show-modal" @click="showModal = true">Подробнее</button>
+            <modal v-if="showModal" @close="showModal = false">
+                <h3 slot="header">Подробнее</h3>
+                <p slot="body">Простой генератор лотерейных билетов по типу ГОСЛОТО 4 из 20. Билеты генерируются случайным образом.
+                  Выйгрышные числа билета заменяются на маркер XX. Покупка билетов временно бесплатна :)</p>
+            </modal>
+            <p>Выберите количество лотерейных<br/> билетов на игру:</p>
+            <select v-model="selected">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+            </select>
+            <span>Выбрано: {{ selected }}</span>
+            <button v-on:click.once="newTickets">Купить</button>
+            <transition name="fade" mode="out-in">
+                <ul v-if="isGenerated">
+                    <li is="ticket-list" v-for="ticket in tickets" v-bind:key="ticket.id" v-bind:field1="ticket.field1" v-bind:field2="ticket.field2">
+                    </li>
+                </ul>
+            </transition>
+            <button v-show="isGenerated" v-on:click.once="playLottery">Выигрышный билет</button>
+            <template v-if="isPlayed">
+                <p>И выйгрышный билет...:</p>
+                <p>{{ winTicket[0].field1 }} / {{ winTicket[0].field2 }}</p>
+                <button v-on:click="window.location.reload()">Очистить</button>
+            </template>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
